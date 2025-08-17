@@ -48,7 +48,8 @@ function CheckoutContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           email, 
-          website
+          website,
+          priceId: 'price_1Rti2e5Y5F2onCZWxYSa4RtV'
         })
       })
 

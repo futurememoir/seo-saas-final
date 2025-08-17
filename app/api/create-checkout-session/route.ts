@@ -12,8 +12,11 @@ const supabase = createClient(
 )
 
 export async function POST(request: NextRequest) {
+  let priceId: string | undefined
   try {
-    const { email, website, priceId } = await request.json()
+    const requestData = await request.json()
+    const { email, website } = requestData
+    priceId = requestData.priceId
 
     if (!email || !website) {
       return NextResponse.json({ error: 'Email and website are required' }, { status: 400 })
@@ -72,11 +75,20 @@ export async function POST(request: NextRequest) {
     
     // Return detailed error for debugging
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorDetails = {
+      message: errorMessage,
+      hasStripeKey: !!process.env.STRIPE_SECRET_KEY,
+      hasPriceId: !!process.env.STRIPE_PRICE_ID,
+      hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasSupabaseKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+      receivedPriceId: priceId || process.env.STRIPE_PRICE_ID
+    }
+    
     return NextResponse.json(
       { 
         error: 'Unable to create checkout session',
         details: errorMessage,
-        debug: process.env.NODE_ENV === 'development' ? error : undefined
+        debug: errorDetails
       }, 
       { status: 500 }
     )

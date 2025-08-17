@@ -1,8 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, DM_Mono } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
+const dmMono = DM_Mono({ 
+  weight: ['400', '500'],
+  subsets: ['latin'],
+  variable: '--font-dm-mono'
+})
 
 export const metadata: Metadata = {
   title: 'Daily SEO Assistant - Automated SEO Audits',
@@ -20,7 +25,7 @@ export default function RootLayout({
       <head>
         <script src="https://js.stripe.com/v3/" async></script>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} ${dmMono.variable}`}>{children}</body>
     </html>
   )
 }
